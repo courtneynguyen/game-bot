@@ -1,6 +1,6 @@
 GLOBAL.host_name = "https://api.hipchat.com/v2";
 GLOBAL.roomId = "1357709";
-GLOBAL.auth_token = "cjc5nUgJ8RgtkMNJsglOzWHl28AMqOqvpRSYYX5q";
+GLOBAL.auth_token = "4ed3da28251cb677c30b08cbf2c0ed";
 
 // [Express](http://expressjs.com/) is your friend -- it's the underlying
 // web framework that `atlassian-connect-express` uses
@@ -76,7 +76,7 @@ routes(app, addon);
 
 // Boot the damn thing
 http.createServer(app).listen(port, function(){
-  console.log()
+  
   console.log('Add-on server running at '+ (addon.config.localBaseUrl()||('http://' + (os.hostname()) + ':' + port)));
   // Enables auto registration/de-registration of add-ons into a host in dev mode
   if (devEnv) addon.register();

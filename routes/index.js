@@ -13,6 +13,7 @@ module.exports = function (app, addon) {
         // If the request content-type is text-html, it will decide which to serve up
         'text/html': function () {
           res.redirect(addon.descriptor.links.homepage);
+          // res.redirect('/atlassian-connect.json');
         },
         // This logic is here to make sure that the `addon.json` is always
         // served up when requested by the host
@@ -33,7 +34,8 @@ module.exports = function (app, addon) {
       //   clientKey, oauth info, and HipChat account info
       // * req.context: contains the context data accompanying the request like
       //   the roomId
-      res.render('config', req.context);
+      // res.render('config', req.context);
+      res.render('config', res);
     }
   );
 
@@ -49,33 +51,37 @@ module.exports = function (app, addon) {
   );
 
   app.get('/test', function(req, res){
-    console.log('WHAT IS HOST????');
-    console.log(host_name);
-    console.log(auth_token);
-    console.log(roomId);
-    rp.post({
-      method:'POST',
-      uri: host_name+"/room/"+roomId+"/notification",
-      qs: {
-        auth_token: auth_token
-      },
-      json: {
-        message:"HELLO WORLD",
-        color:"red",
-        message_format:"text",
-        notify:"true"
-      }
-    })
-    .then(function(res){
-      res.send("sent");
-    })
-    .catch(function(data){
-      res.send(data);
-    });
+
+
+    res.send(hipchat);
+    // console.log('WHAT IS HOST????');
+    // console.log(host_name);
+    // console.log(auth_token);
+    // console.log(roomId);
+    // rp.post({
+    //   method:'POST',
+    //   uri: host_name+"/room/"+roomId+"/notification",
+    //   qs: {
+    //     auth_token: auth_token
+    //   },
+    //   json: {
+    //     message:"HELLO WORLD",
+    //     color:"red",
+    //     message_format:"text",
+    //     notify:"true"
+    //   }
+    // })
+    // .then(function(res){
+    //   res.send("sent");
+    // })
+    // .catch(function(data){
+    //   res.send(data);
+    // });
   });
 
   // Notify the room that the add-on was installed
   addon.on('installed', function(clientKey, clientInfo, req){
+    addon.config.client = clientInfo;
     hipchat.sendMessage(clientInfo, req.body.roomId, 'The ' + addon.descriptor.name + ' add-on has been installed in this room');
   });
 
