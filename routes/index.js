@@ -1,5 +1,6 @@
 var http = require('request');
 var rp = require('request-promise');
+var scramble = require('../scramble.js');
 
 module.exports = function (app, addon) {
   var hipchat = require('../lib/hipchat')(addon);
@@ -22,7 +23,7 @@ module.exports = function (app, addon) {
         }
       });
     }
-  );
+    );
 
   // This is an example route that's used by the default for the configuration page
   app.get('/config',
@@ -37,18 +38,71 @@ module.exports = function (app, addon) {
       // res.render('config', req.context);
       res.render('config', res);
     }
-  );
+    );
 
   // This is an example route to handle an incoming webhook
   app.post('/webhook',
     addon.authenticate(),
     function(req, res) {
       hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'pong')
-        .then(function(data){
-          res.send(200);
-        });
+      .then(function(data){
+        res.send(200);
+      });
     }
-  );
+    );
+
+  function parseCategory(category){
+
+  };
+
+  app.post('/scramble-start',
+    addon.authenticate(),
+    function(req, res){
+      var command = req.context.item.message.message;
+      var category = command.split(/[\s-]+/);
+      var msg = "";
+      if(scramble.isCategory(category[category.length-1])){
+        msg = category[category.length-1];
+      }
+      else{
+        msg = "random";
+      }
+      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Starting "'+ msg +'" game of Scramble.', 
+        {options: {
+          color:"green", "notify":true
+        }
+      })
+      .then(function(data){
+
+        res.send(200);
+      });
+    });
+
+  app.post('/scramble-stop',
+    addon.authenticate(),
+    function(req, res){
+      console.log('CHECK REQUEST ----------------------------------------');
+      console.log(req.context);
+      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Cancelling game of Scramble', 
+      {
+        options: {
+          color:"red", notify:false}
+        })
+      .then(function(data){
+        res.send(200);
+      });
+    });
+
+  app.post('/scramble-pause',
+    addon.authenticate(),
+    function(req, res){
+      console.log('CHECK REQUEST ----------------------------------------');
+      console.log(req.context);
+      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Pausing game of Scramble')
+      .then(function(data){
+        res.send(200);
+      });
+    });
 
   app.get('/test', function(req, res){
 
@@ -77,7 +131,7 @@ module.exports = function (app, addon) {
     // .catch(function(data){
     //   res.send(data);
     // });
-  });
+});
 
   // Notify the room that the add-on was installed
   addon.on('installed', function(clientKey, clientInfo, req){

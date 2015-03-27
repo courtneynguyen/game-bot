@@ -1,3 +1,5 @@
+
+
 {
     "key": "hipchat-game-bot",
     "name": "Gamebot",
@@ -24,12 +26,30 @@
         "configurable": {
              "url": "{{localBaseUrl}}/config"
         },
-        "webhook": {
+        "webhook": [{
             "url": "{{localBaseUrl}}/webhook",
             "pattern": "^/ping",
             "event": "room_message",
             "name": "Destroyer of Games"
-        }
+        },
+        {
+            "url": "{{localBaseUrl}}/scramble-start",
+            "pattern": "^/scramble start( -[\\w]+)?$",
+            "event": "room_message",
+            "name": "Start scramble game"
+        },
+        {
+            "url": "{{localBaseUrl}}/scramble-stop",
+            "pattern": "^/scramble stop$",
+            "event": "room_message",
+            "name": "Stop scramble game"
+        },
+        {
+            "url": "{{localBaseUrl}}/scramble-pause",
+            "pattern": "^/scramble pause$",
+            "event": "room_message",
+            "name": "Pause scramble game"
+        }]
     },
     "adminToken":"4ed3da28251cb677c30b08cbf2c0ed"
 }
