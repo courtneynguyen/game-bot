@@ -17,7 +17,8 @@
             "scopes": [
                 "send_notification",
                 "view_group",
-                "view_messages"
+                "view_messages",
+                "admin_room"
             ]
         },
         "installable": {

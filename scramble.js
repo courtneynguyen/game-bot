@@ -1,5 +1,7 @@
 var lodash = require('lodash');
 module.exports = (function(){
+    var timeoutId = 0;
+    var roundNumber = 0;
     var categories = {
         vegetable: [
             'potato', 'carrot', 'turnip', 'parsnip', 'rhutabaga', 'radish', 'kale'],
@@ -50,9 +52,40 @@ module.exports = (function(){
         };
     };
 
+    function startRound () {
+        roundNumber++;
+        
+    }
+
+    function loop () {
+        // pause to announce scrambled word:
+        window.setTimeout(startRound, 5000);
+    }
+
+    var startGame = function(people, room){
+        state = "running";
+        console.log('STARTED GAME!!');
+        // while(state === "running"){
+
+        // }
+    }
+
+    var pauseGame = function(){
+        state = "paused";
+    };
+
+    var terminateGame = function(){
+        state = "";
+    };
+
     return {
         getScramble: getScramble,
         isCategory: isCategory,
-        state: ""
+        state: "",
+        scores: {},
+        startGame: startGame,
+        terminateGame: terminateGame,
+        pauseGame: pauseGame,
+        roundNumber: roundNumber
     };
 })();

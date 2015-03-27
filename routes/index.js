@@ -35,6 +35,11 @@ module.exports = function (app, addon) {
       //   clientKey, oauth info, and HipChat account info
       // * req.context: contains the context data accompanying the request like
       //   the roomId
+      console.log('CHECK CONFIG ----------------------------------------');  
+      console.log(req.query);
+      console.log('END CHECK CONFIG ----------------------------------------');
+  // console.log(req.clientInfo.clientKey);
+  // var test = addon._jwt.decode(req.query.signed_request, req.clientInfo.clientKey, false);
       // res.render('config', req.context);
       res.render('config', res);
     }
@@ -51,11 +56,7 @@ module.exports = function (app, addon) {
     }
     );
 
-  function parseCategory(category){
-
-  };
-
-  app.post('/scramble-start',
+    app.post('/scramble-start',
     addon.authenticate(),
     function(req, res){
       console.log(req.context.item);
@@ -93,60 +94,32 @@ module.exports = function (app, addon) {
       });
     });
 
-  app.post('/scramble-stop',
-    addon.authenticate(),
-    function(req, res){
-      console.log('CHECK REQUEST ----------------------------------------');
-      console.log(req.context);
-      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Cancelling game of Scramble', 
-      {
-        options: {
-          color:"red", notify:false}
-        })
-      .then(function(data){
-        res.send(200);
-      });
+
+app.post('/scramble-stop',
+  addon.authenticate(),
+  function(req, res){
+    console.log('CHECK REQUEST ----------------------------------------');
+    console.log(req.context);
+    hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Cancelling game of Scramble', 
+    {
+      options: {
+        color:"red", notify:false}
+      })
+    .then(function(data){
+      res.send(200);
     });
+  });
 
-  app.post('/scramble-pause',
-    addon.authenticate(),
-    function(req, res){
-      console.log('CHECK REQUEST ----------------------------------------');
-      console.log(req.context);
-      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Pausing game of Scramble')
-      .then(function(data){
-        res.send(200);
-      });
+app.post('/scramble-pause',
+  addon.authenticate(),
+  function(req, res){
+    console.log('CHECK REQUEST ----------------------------------------');
+    console.log(req.context);
+    hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Pausing game of Scramble')
+    .then(function(data){
+      res.send(200);
     });
-
-  app.get('/test', function(req, res){
-
-
-    res.send(hipchat);
-    // console.log('WHAT IS HOST????');
-    // console.log(host_name);
-    // console.log(auth_token);
-    // console.log(roomId);
-    // rp.post({
-    //   method:'POST',
-    //   uri: host_name+"/room/"+roomId+"/notification",
-    //   qs: {
-    //     auth_token: auth_token
-    //   },
-    //   json: {
-    //     message:"HELLO WORLD",
-    //     color:"red",
-    //     message_format:"text",
-    //     notify:"true"
-    //   }
-    // })
-    // .then(function(res){
-    //   res.send("sent");
-    // })
-    // .catch(function(data){
-    //   res.send(data);
-    // });
-});
+  });
 
   // Notify the room that the add-on was installed
   addon.on('installed', function(clientKey, clientInfo, req){
@@ -163,5 +136,4 @@ module.exports = function (app, addon) {
       });
     });
   });
-
 };
