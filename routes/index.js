@@ -58,23 +58,38 @@ module.exports = function (app, addon) {
   app.post('/scramble-start',
     addon.authenticate(),
     function(req, res){
+      console.log(req.context.item);
       var command = req.context.item.message.message;
       var category = command.split(/[\s-]+/);
       var msg = "";
+
+      
       if(scramble.isCategory(category[category.length-1])){
         msg = category[category.length-1];
       }
-      else{
-        msg = "random";
-      }
-      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Starting "'+ msg +'" game of Scramble.', 
-        {options: {
-          color:"green", "notify":true
-        }
-      })
-      .then(function(data){
 
-        res.send(200);
+      var scrambledWord = scramble.getScramble(msg);
+
+      if(msg === "")msg = scrambledWord.category;
+
+      hipchat.sendMessage(req.clientInfo, req.context.item.room.id, 'Starting "'+ msg +'" game of Scramble.', 
+        {
+          options: {
+          color:"green", "notify":true
+          }
+        })
+      .then(function(data){
+        
+        console.log('SCRAMBLED WORD:');
+        console.log(GLOBAL.clientInfo);
+
+        hipchat.sendMessage(GLOBAL.clientInfo, req.context.item.room.id, scrambledWord.scramble + '')
+        .then(function(data2){
+          console.log(data2);
+          console.log('DONE!!!');
+            res.send(200);
+        });
+        
       });
     });
 
@@ -135,7 +150,7 @@ module.exports = function (app, addon) {
 
   // Notify the room that the add-on was installed
   addon.on('installed', function(clientKey, clientInfo, req){
-    addon.config.client = clientInfo;
+    GLOBAL.clientInfo = clientInfo;
     hipchat.sendMessage(clientInfo, req.body.roomId, 'The ' + addon.descriptor.name + ' add-on has been installed in this room');
   });
 

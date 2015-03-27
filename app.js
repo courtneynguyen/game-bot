@@ -1,6 +1,7 @@
 GLOBAL.host_name = "https://api.hipchat.com/v2";
 GLOBAL.roomId = "1357709";
 GLOBAL.auth_token = "4ed3da28251cb677c30b08cbf2c0ed";
+GLOBAL.client = {};
 
 // [Express](http://expressjs.com/) is your friend -- it's the underlying
 // web framework that `atlassian-connect-express` uses

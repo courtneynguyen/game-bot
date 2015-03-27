@@ -31,10 +31,6 @@ module.exports = (function(){
 
     var isCategory = function (category) {
         var categoryKeys = lodash.keys(categories);
-        console.log(category);
-        console.log('CATEGORY KEYS:');
-        console.log(categoryKeys);
-
         return categoryKeys.indexOf(category) >= 0 ? true : false;
     }
     
@@ -45,9 +41,6 @@ module.exports = (function(){
 
         var randomIndex = Math.floor(Math.random() * categories[category].length);
         var answer = categories[category][randomIndex];
-        console.log(answer);
-        console.log(category);
-        console.log(randomIndex);
         var scramble = scrambleWord(answer);
 
         return {

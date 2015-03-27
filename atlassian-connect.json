@@ -17,7 +17,7 @@
             "scopes": [
                 "send_notification",
                 "view_group",
-                "send_message"
+                "view_messages"
             ]
         },
         "installable": {
